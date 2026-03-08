@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exam Time Table – MSBTE</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a1a2e; background: #f5f7fa; line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    :root {
+      --primary:   #0a3d62;
+      --secondary: #f39c12;
+      --accent:    #e74c3c;
+      --light:     #ecf0f1;
+      --white:     #ffffff;
+      --text:      #2c3e50;
+    }
+
+    .top-strip { background: var(--primary); color: var(--white); text-align: center; font-size: 0.78rem; padding: 6px 16px; }
+    header { background: var(--white); box-shadow: 0 2px 8px rgba(0,0,0,0.12); position: sticky; top: 0; z-index: 100; }
+    .header-inner { max-width: 1200px; margin: auto; display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; gap: 16px; }
+    .logo-wrap { display: flex; align-items: center; gap: 14px; }
+    .logo-circle { width: 58px; height: 58px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .logo-circle span { color: var(--white); font-size: 1.15rem; font-weight: 800; letter-spacing: 1px; }
+    .logo-text h1 { font-size: 1.1rem; color: var(--primary); line-height: 1.2; }
+    .logo-text p  { font-size: 0.72rem; color: #666; }
+    nav ul { display: flex; gap: 4px; flex-wrap: wrap; }
+    nav ul li a { padding: 8px 14px; border-radius: 4px; font-size: 0.88rem; font-weight: 600; color: var(--text); transition: background 0.2s, color 0.2s; }
+    nav ul li a:hover, nav ul li a.active { background: var(--primary); color: var(--white); }
+    @media (max-width: 840px) { .header-inner { flex-direction: column; align-items: flex-start; } }
+
+    .page-hero { background: linear-gradient(135deg, var(--primary) 0%, #16213e 100%); color: var(--white); padding: 48px 24px 56px; text-align: center; }
+    .page-hero h2 { font-size: clamp(1.4rem, 3vw, 2.2rem); margin-bottom: 10px; }
+    .page-hero p  { opacity: 0.85; font-size: 0.95rem; }
+
+    .breadcrumb { background: var(--light); padding: 10px 24px; }
+    .breadcrumb-inner { max-width: 1200px; margin: auto; font-size: 0.83rem; color: #666; }
+    .breadcrumb-inner a { color: var(--primary); font-weight: 600; }
+
+    section { padding: 56px 24px; }
+    .section-inner { max-width: 1100px; margin: auto; }
+
+    /* Download cards */
+    .tt-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 22px; margin-bottom: 40px; }
+    .tt-card { background: var(--white); border-radius: 10px; padding: 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); display: flex; flex-direction: column; gap: 12px; border-top: 4px solid var(--secondary); }
+    .tt-card .session-badge { background: var(--primary); color: var(--white); font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 12px; display: inline-block; width: fit-content; }
+    .tt-card h3 { font-size: 1rem; color: var(--text); }
+    .tt-card p  { font-size: 0.83rem; color: #666; flex: 1; }
+    .tt-card a.dl { display: inline-flex; align-items: center; gap: 8px; background: var(--primary); color: var(--white); padding: 10px 20px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; transition: background 0.2s; }
+    .tt-card a.dl:hover { background: var(--secondary); color: #1a1a2e; }
+
+    /* Timetable table */
+    .tt-table-wrap { overflow-x: auto; }
+    .tt-table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+    .tt-table th { background: var(--primary); color: var(--white); padding: 12px 16px; font-size: 0.85rem; text-align: left; white-space: nowrap; }
+    .tt-table td { padding: 11px 16px; font-size: 0.85rem; border-bottom: 1px solid #eee; white-space: nowrap; }
+    .tt-table tr:last-child td { border-bottom: none; }
+    .tt-table tr:hover td { background: #f0f7ff; }
+    .tt-table td:first-child { font-weight: 600; color: var(--primary); }
+
+    .section-heading { font-size: 1.2rem; color: var(--primary); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--secondary); }
+
+    footer { background: #16213e; color: rgba(255,255,255,0.8); }
+    .footer-bottom { text-align: center; padding: 20px 24px; font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+  </style>
+</head>
+<body>
+
+<div class="top-strip">Government of Maharashtra &nbsp;|&nbsp; Skill, Vocational Education, Training and Innovation Department</div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-wrap">
+      <div class="logo-circle"><span>MS</span></div>
+      <div class="logo-text">
+        <h1>Maharashtra State Board of Technical Education</h1>
+        <p>महाराष्ट्र राज्य तंत्र शिक्षण मंडळ, मुंबई &nbsp;|&nbsp; Autonomous Body – Government of Maharashtra</p>
+      </div>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="results.html">Results</a></li>
+        <li><a href="syllabus.html">Syllabus</a></li>
+        <li><a href="timetable.html" class="active">Time Table</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="page-hero">
+  <h2>📅 Examination Time Table</h2>
+  <p>Download the official examination schedule for all semesters – Summer &amp; Winter sessions.</p>
+</div>
+
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="index.html">Home</a> &rsaquo; Time Table
+  </div>
+</div>
+
+<section>
+  <div class="section-inner">
+    <h2 class="section-heading">Download Time Tables</h2>
+    <div class="tt-grid">
+      <div class="tt-card">
+        <span class="session-badge">UPCOMING</span>
+        <h3>Summer 2025 – All Semesters</h3>
+        <p>Official time table for Summer 2025 examinations (1st to 6th Semester). Exams begin April 2025.</p>
+        <a href="#" class="dl">⬇ Download PDF</a>
+      </div>
+      <div class="tt-card">
+        <span class="session-badge" style="background:#27ae60;">COMPLETED</span>
+        <h3>Winter 2024 – All Semesters</h3>
+        <p>Official time table for Winter 2024 examinations (1st to 6th Semester). Held Oct–Nov 2024.</p>
+        <a href="#" class="dl">⬇ Download PDF</a>
+      </div>
+      <div class="tt-card">
+        <span class="session-badge" style="background:#27ae60;">COMPLETED</span>
+        <h3>Summer 2024 – All Semesters</h3>
+        <p>Official time table for Summer 2024 examinations. Held April–May 2024.</p>
+        <a href="#" class="dl">⬇ Download PDF</a>
+      </div>
+      <div class="tt-card">
+        <span class="session-badge" style="background:#27ae60;">COMPLETED</span>
+        <h3>Winter 2023 – All Semesters</h3>
+        <p>Official time table for Winter 2023 examinations. Held October–November 2023.</p>
+        <a href="#" class="dl">⬇ Download PDF</a>
+      </div>
+    </div>
+
+    <!-- Sample timetable -->
+    <h2 class="section-heading">Summer 2025 – Sample Schedule (1st &amp; 2nd Semester)</h2>
+    <div class="tt-table-wrap">
+      <table class="tt-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Day</th>
+            <th>Time</th>
+            <th>Subject Code</th>
+            <th>Subject Name</th>
+            <th>Semester</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>07 Apr 2025</td><td>Monday</td><td>11:00 AM – 2:00 PM</td><td>22101</td><td>Basic Mathematics</td><td>1st</td></tr>
+          <tr><td>09 Apr 2025</td><td>Wednesday</td><td>11:00 AM – 2:00 PM</td><td>22102</td><td>Basic Science</td><td>1st</td></tr>
+          <tr><td>11 Apr 2025</td><td>Friday</td><td>11:00 AM – 2:00 PM</td><td>22103</td><td>Communication Skills</td><td>1st</td></tr>
+          <tr><td>14 Apr 2025</td><td>Monday</td><td>11:00 AM – 2:00 PM</td><td>22104</td><td>Engineering Drawing</td><td>1st</td></tr>
+          <tr><td>08 Apr 2025</td><td>Tuesday</td><td>11:00 AM – 2:00 PM</td><td>22201</td><td>Applied Mathematics</td><td>2nd</td></tr>
+          <tr><td>10 Apr 2025</td><td>Thursday</td><td>11:00 AM – 2:00 PM</td><td>22202</td><td>Applied Science</td><td>2nd</td></tr>
+          <tr><td>12 Apr 2025</td><td>Saturday</td><td>11:00 AM – 2:00 PM</td><td>22203</td><td>Environmental Studies</td><td>2nd</td></tr>
+          <tr><td>15 Apr 2025</td><td>Tuesday</td><td>11:00 AM – 2:00 PM</td><td>22204</td><td>Professional Practice</td><td>2nd</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:12px; font-size:0.8rem; color:#888;">* This is a sample schedule for illustration. Official dates are published in the downloadable PDF.</p>
+
+    <!-- Instructions -->
+    <h2 class="section-heading" style="margin-top:40px;">General Instructions</h2>
+    <div style="background:var(--white); border-radius:8px; padding:24px; box-shadow:0 2px 8px rgba(0,0,0,0.07);">
+      <ul style="list-style:disc; padding-left:20px; font-size:0.9rem; color:var(--text); line-height:2;">
+        <li>Students must carry their valid Hall Ticket to the examination centre.</li>
+        <li>Reach the exam centre at least 30 minutes before the exam start time.</li>
+        <li>No electronic devices (mobile phones, calculators unless permitted) are allowed.</li>
+        <li>Examination timings are 11:00 AM to 2:00 PM unless stated otherwise.</li>
+        <li>No student will be allowed to enter after 30 minutes of exam commencement.</li>
+        <li>Students must follow the dress code as per institute norms.</li>
+        <li>Refer to the official MSBTE portal for any last-minute changes or rescheduling.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-bottom">
+    &copy; 2025 Maharashtra State Board of Technical Education (MSBTE). All Rights Reserved.
+    &nbsp;|&nbsp; <a href="index.html" style="color:rgba(255,255,255,0.6);">Home</a>
+  </div>
+</footer>
+
+</body>
+</html>
