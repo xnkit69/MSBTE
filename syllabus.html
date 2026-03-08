@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Syllabus & Curriculum – MSBTE</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a1a2e; background: #f5f7fa; line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    :root {
+      --primary:   #0a3d62;
+      --secondary: #f39c12;
+      --accent:    #e74c3c;
+      --light:     #ecf0f1;
+      --white:     #ffffff;
+      --text:      #2c3e50;
+    }
+
+    .top-strip { background: var(--primary); color: var(--white); text-align: center; font-size: 0.78rem; padding: 6px 16px; }
+    header { background: var(--white); box-shadow: 0 2px 8px rgba(0,0,0,0.12); position: sticky; top: 0; z-index: 100; }
+    .header-inner { max-width: 1200px; margin: auto; display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; gap: 16px; }
+    .logo-wrap { display: flex; align-items: center; gap: 14px; }
+    .logo-circle { width: 58px; height: 58px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .logo-circle span { color: var(--white); font-size: 1.15rem; font-weight: 800; letter-spacing: 1px; }
+    .logo-text h1 { font-size: 1.1rem; color: var(--primary); line-height: 1.2; }
+    .logo-text p  { font-size: 0.72rem; color: #666; }
+    nav ul { display: flex; gap: 4px; flex-wrap: wrap; }
+    nav ul li a { padding: 8px 14px; border-radius: 4px; font-size: 0.88rem; font-weight: 600; color: var(--text); transition: background 0.2s, color 0.2s; }
+    nav ul li a:hover, nav ul li a.active { background: var(--primary); color: var(--white); }
+    @media (max-width: 840px) { .header-inner { flex-direction: column; align-items: flex-start; } }
+
+    .page-hero { background: linear-gradient(135deg, var(--primary) 0%, #16213e 100%); color: var(--white); padding: 48px 24px 56px; text-align: center; }
+    .page-hero h2 { font-size: clamp(1.4rem, 3vw, 2.2rem); margin-bottom: 10px; }
+    .page-hero p  { opacity: 0.85; font-size: 0.95rem; }
+
+    .breadcrumb { background: var(--light); padding: 10px 24px; }
+    .breadcrumb-inner { max-width: 1200px; margin: auto; font-size: 0.83rem; color: #666; }
+    .breadcrumb-inner a { color: var(--primary); font-weight: 600; }
+
+    section { padding: 56px 24px; }
+    .section-inner { max-width: 1100px; margin: auto; }
+
+    .filter-bar { background: var(--white); border-radius: 10px; padding: 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 36px; }
+    .filter-group { flex: 1; min-width: 180px; }
+    .filter-group label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .filter-group select, .filter-group input {
+      width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 6px;
+      font-size: 0.88rem; outline: none; transition: border-color 0.2s; font-family: inherit;
+    }
+    .filter-group select:focus, .filter-group input:focus { border-color: var(--primary); }
+    .filter-btn { background: var(--primary); color: var(--white); padding: 10px 28px; border: none; border-radius: 6px; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: background 0.2s; align-self: flex-end; }
+    .filter-btn:hover { background: #0d5284; }
+
+    /* Syllabus cards */
+    .program-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 22px; }
+    .prog-card { background: var(--white); border-radius: 10px; padding: 22px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); border-left: 4px solid var(--primary); transition: transform 0.2s, box-shadow 0.2s; }
+    .prog-card:hover { transform: translateY(-4px); box-shadow: 0 8px 22px rgba(0,0,0,0.12); }
+    .prog-card .tag { background: #e8f4f8; color: var(--primary); font-size: 0.72rem; font-weight: 700; padding: 3px 10px; border-radius: 12px; display: inline-block; margin-bottom: 10px; }
+    .prog-card h3 { font-size: 0.95rem; color: var(--text); margin-bottom: 8px; }
+    .prog-card p  { font-size: 0.8rem; color: #666; margin-bottom: 14px; }
+    .prog-card .dl-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--primary); color: var(--white); padding: 8px 18px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; transition: background 0.2s; }
+    .prog-card .dl-btn:hover { background: var(--secondary); color: #1a1a2e; }
+
+    /* Section heading */
+    .section-heading { font-size: 1.2rem; color: var(--primary); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--secondary); }
+
+    .note-box { background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px; padding: 16px 20px; font-size: 0.87rem; color: #5d4037; margin-bottom: 30px; }
+
+    footer { background: #16213e; color: rgba(255,255,255,0.8); }
+    .footer-bottom { text-align: center; padding: 20px 24px; font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+  </style>
+</head>
+<body>
+
+<div class="top-strip">Government of Maharashtra &nbsp;|&nbsp; Skill, Vocational Education, Training and Innovation Department</div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-wrap">
+      <div class="logo-circle"><span>MS</span></div>
+      <div class="logo-text">
+        <h1>Maharashtra State Board of Technical Education</h1>
+        <p>महाराष्ट्र राज्य तंत्र शिक्षण मंडळ, मुंबई &nbsp;|&nbsp; Autonomous Body – Government of Maharashtra</p>
+      </div>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="results.html">Results</a></li>
+        <li><a href="syllabus.html" class="active">Syllabus</a></li>
+        <li><a href="timetable.html">Time Table</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="page-hero">
+  <h2>📚 Syllabus &amp; Curriculum</h2>
+  <p>Download the revised 2022-pattern curriculum for all diploma programs offered under MSBTE.</p>
+</div>
+
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="index.html">Home</a> &rsaquo; Syllabus &amp; Curriculum
+  </div>
+</div>
+
+<section>
+  <div class="section-inner">
+    <div class="note-box">
+      ⚠️ <strong>Note:</strong> The 2022 revised curriculum (K-Scheme) is applicable from the academic year 2022-23.
+      Institutes should refer to the latest curriculum. For older batches, refer to G-Scheme / I-Scheme curriculum.
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label>Pattern / Scheme</label>
+        <select>
+          <option>K-Scheme (2022)</option>
+          <option>I-Scheme (2017)</option>
+          <option>G-Scheme (2012)</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Branch / Discipline</label>
+        <select>
+          <option value="">All Branches</option>
+          <option>Computer Engineering</option>
+          <option>Civil Engineering</option>
+          <option>Mechanical Engineering</option>
+          <option>Electrical Engineering</option>
+          <option>Electronics &amp; Telecom.</option>
+          <option>Information Technology</option>
+          <option>Chemical Engineering</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Semester</label>
+        <select>
+          <option value="">All Semesters</option>
+          <option>1st Semester</option>
+          <option>2nd Semester</option>
+          <option>3rd Semester</option>
+          <option>4th Semester</option>
+          <option>5th Semester</option>
+          <option>6th Semester</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Search by Subject / Code</label>
+        <input type="text" placeholder="e.g. Basic Mathematics" />
+      </div>
+      <button class="filter-btn">Search</button>
+    </div>
+
+    <!-- Engineering programs -->
+    <h2 class="section-heading">Engineering Diploma Programs</h2>
+    <div class="program-grid">
+      <div class="prog-card">
+        <span class="tag">K-Scheme 2022</span>
+        <h3>Computer Engineering</h3>
+        <p>Full curriculum covering all 6 semesters including subjects, teaching schemes &amp; assessment.</p>
+        <a href="#" class="dl-btn">⬇ Download PDF</a>
+      </div>
+      <div class="prog-card">
+        <span class="tag">K-Scheme 2022</span>
+        <h3>Civil Engineering</h3>
+        <p>Full curriculum covering all 6 semesters including subjects, teaching schemes &amp; assessment.</p>
+        <a href="#" class="dl-btn">⬇ Download PDF</a>
+      </div>
+      <div class="prog-card">
+        <span class="tag">K-Scheme 2022</span>
+        <h3>Mechanical Engineering</h3>
+        <p>Full curriculum covering all 6 semesters including subjects, teaching schemes &amp; assessment.</p>
+        <a href="#" class="dl-btn">⬇ Download PDF</a>
+      </div>
+      <div class="prog-card">
+        <span class="tag">K-Scheme 2022</span>
+        <h3>Electrical Engineering</h3>
+        <p>Full curriculum covering all 6 semesters including subjects, teaching schemes &amp; assessment.</p>
+        <a href="#" class="dl-btn">⬇ Download PDF</a>
+      </div>
+      <div class="prog-card">
+        <span class="tag">K-Scheme 2022</span>
+        <h3>Electronics &amp; Telecommunication</h3>
+        <p>Full curriculum covering all 6 semesters including subjects, teaching schemes &amp; assessment.</p>
+        <a href="#" class="dl-btn">⬇ Download PDF</a>
+      </div>
+      <div class="prog-card">
+        <span class="tag">K-Scheme 2022</span>
+        <h3>Information Technology</h3>
+        <p>Full curriculum covering all 6 semesters including subjects, teaching schemes &amp; assessment.</p>
+        <a href="#" class="dl-btn">⬇ Download PDF</a>
+      </div>
+      <div class="prog-card">
+        <span class="tag">K-Scheme 2022</span>
+        <h3>Chemical Engineering</h3>
+        <p>Full curriculum covering all 6 semesters including subjects, teaching schemes &amp; assessment.</p>
+        <a href="#" class="dl-btn">⬇ Download PDF</a>
+      </div>
+      <div class="prog-card">
+        <span class="tag">K-Scheme 2022</span>
+        <h3>Automobile Engineering</h3>
+        <p>Full curriculum covering all 6 semesters including subjects, teaching schemes &amp; assessment.</p>
+        <a href="#" class="dl-btn">⬇ Download PDF</a>
+      </div>
+      <div class="prog-card">
+        <span class="tag">K-Scheme 2022</span>
+        <h3>Instrumentation Engineering</h3>
+        <p>Full curriculum covering all 6 semesters including subjects, teaching schemes &amp; assessment.</p>
+        <a href="#" class="dl-btn">⬇ Download PDF</a>
+      </div>
+    </div>
+
+    <!-- Non-engineering programs -->
+    <h2 class="section-heading" style="margin-top:40px;">Non-Engineering Diploma Programs</h2>
+    <div class="program-grid">
+      <div class="prog-card">
+        <span class="tag">K-Scheme 2022</span>
+        <h3>Pharmacy</h3>
+        <p>Full curriculum for Diploma in Pharmacy including all semesters and practicals.</p>
+        <a href="#" class="dl-btn">⬇ Download PDF</a>
+      </div>
+      <div class="prog-card">
+        <span class="tag">K-Scheme 2022</span>
+        <h3>Hotel Management &amp; Catering Technology</h3>
+        <p>Curriculum for hospitality and catering technology diploma program.</p>
+        <a href="#" class="dl-btn">⬇ Download PDF</a>
+      </div>
+      <div class="prog-card">
+        <span class="tag">K-Scheme 2022</span>
+        <h3>Commercial &amp; Computer Practice</h3>
+        <p>Curriculum for Commerce and Computer Practice diploma program.</p>
+        <a href="#" class="dl-btn">⬇ Download PDF</a>
+      </div>
+    </div>
+
+    <!-- Common subjects -->
+    <h2 class="section-heading" style="margin-top:40px;">Common First Year Subjects (K-Scheme)</h2>
+    <div class="program-grid">
+      <div class="prog-card">
+        <span class="tag">1st Semester</span>
+        <h3>Basic Mathematics (22101)</h3>
+        <p>Algebra, Trigonometry, Differential Calculus and Integral Calculus for diploma engineers.</p>
+        <a href="#" class="dl-btn">⬇ Download PDF</a>
+      </div>
+      <div class="prog-card">
+        <span class="tag">1st Semester</span>
+        <h3>Basic Science (22102)</h3>
+        <p>Physics and Chemistry fundamentals relevant to technical diploma programs.</p>
+        <a href="#" class="dl-btn">⬇ Download PDF</a>
+      </div>
+      <div class="prog-card">
+        <span class="tag">1st Semester</span>
+        <h3>Communication Skills (22103)</h3>
+        <p>English language skills, technical communication, and professional writing.</p>
+        <a href="#" class="dl-btn">⬇ Download PDF</a>
+      </div>
+      <div class="prog-card">
+        <span class="tag">1st Semester</span>
+        <h3>Engineering Drawing (22104)</h3>
+        <p>Principles of engineering drawing, orthographic projection, and CAD basics.</p>
+        <a href="#" class="dl-btn">⬇ Download PDF</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-bottom">
+    &copy; 2025 Maharashtra State Board of Technical Education (MSBTE). All Rights Reserved.
+    &nbsp;|&nbsp; <a href="index.html" style="color:rgba(255,255,255,0.6);">Home</a>
+  </div>
+</footer>
+
+</body>
+</html>

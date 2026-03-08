@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MSBTE – Maharashtra State Board of Technical Education</title>
+  <style>
+    /* ── Reset & base ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #1a1a2e;
+      background: #f5f7fa;
+      line-height: 1.6;
+    }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img { max-width: 100%; }
+
+    /* ── Colour palette ────────────────────────────────────────────── */
+    :root {
+      --primary:   #0a3d62;
+      --secondary: #f39c12;
+      --accent:    #e74c3c;
+      --light:     #ecf0f1;
+      --white:     #ffffff;
+      --text:      #2c3e50;
+    }
+
+    /* ── Top strip ─────────────────────────────────────────────────── */
+    .top-strip {
+      background: var(--primary);
+      color: var(--white);
+      text-align: center;
+      font-size: 0.78rem;
+      padding: 6px 16px;
+    }
+
+    /* ── Header ────────────────────────────────────────────────────── */
+    header {
+      background: var(--white);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+      gap: 16px;
+    }
+    .logo-wrap { display: flex; align-items: center; gap: 14px; }
+    .logo-circle {
+      width: 58px; height: 58px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .logo-circle span {
+      color: var(--white);
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+    .logo-text h1 { font-size: 1.1rem; color: var(--primary); line-height: 1.2; }
+    .logo-text p  { font-size: 0.72rem; color: #666; }
+
+    nav ul { display: flex; gap: 4px; flex-wrap: wrap; }
+    nav ul li a {
+      padding: 8px 14px;
+      border-radius: 4px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      transition: background 0.2s, color 0.2s;
+    }
+    nav ul li a:hover,
+    nav ul li a.active {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    /* ── Hero ───────────────────────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, #16213e 100%);
+      color: var(--white);
+      padding: 72px 24px 80px;
+      text-align: center;
+    }
+    .hero h2 {
+      font-size: clamp(1.6rem, 4vw, 2.8rem);
+      margin-bottom: 16px;
+      line-height: 1.25;
+    }
+    .hero p {
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      max-width: 640px;
+      margin: 0 auto 32px;
+      opacity: 0.88;
+    }
+    .hero-btns { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .btn {
+      display: inline-block;
+      padding: 13px 32px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.25); }
+    .btn-primary { background: var(--secondary); color: #1a1a2e; }
+    .btn-outline { background: transparent; color: var(--white); border: 2px solid var(--white); }
+
+    /* ── Quick links ────────────────────────────────────────────────── */
+    .quick-links {
+      background: var(--secondary);
+      padding: 22px 24px;
+    }
+    .quick-links-inner {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .quick-links span { font-weight: 700; color: var(--primary); font-size: 0.95rem; }
+    .ql-item {
+      background: var(--white);
+      color: var(--primary);
+      padding: 8px 20px;
+      border-radius: 24px;
+      font-size: 0.83rem;
+      font-weight: 600;
+      transition: background 0.2s, color 0.2s;
+    }
+    .ql-item:hover { background: var(--primary); color: var(--white); }
+
+    /* ── Section commons ────────────────────────────────────────────── */
+    section { padding: 60px 24px; }
+    .section-inner { max-width: 1200px; margin: auto; }
+    .section-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .section-title h2 {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      color: var(--primary);
+      position: relative;
+      display: inline-block;
+      padding-bottom: 10px;
+    }
+    .section-title h2::after {
+      content: '';
+      position: absolute;
+      left: 50%; transform: translateX(-50%);
+      bottom: 0;
+      width: 56px; height: 4px;
+      background: var(--secondary);
+      border-radius: 2px;
+    }
+    .section-title p { color: #555; margin-top: 14px; }
+
+    /* ── Card grid ──────────────────────────────────────────────────── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 24px;
+    }
+    .card {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 28px 22px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border-top: 4px solid var(--primary);
+    }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 8px 24px rgba(0,0,0,0.13); }
+    .card-icon {
+      font-size: 2.4rem;
+      margin-bottom: 14px;
+    }
+    .card h3 { font-size: 1rem; color: var(--primary); margin-bottom: 10px; }
+    .card p  { font-size: 0.85rem; color: #555; }
+    .card a.card-link {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 8px 20px;
+      background: var(--primary);
+      color: var(--white);
+      border-radius: 4px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .card a.card-link:hover { background: var(--secondary); color: #1a1a2e; }
+
+    /* ── Notices ────────────────────────────────────────────────────── */
+    #notices { background: var(--light); }
+    .notices-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 30px;
+    }
+    @media (max-width: 768px) { .notices-grid { grid-template-columns: 1fr; } }
+    .notice-list li {
+      background: var(--white);
+      border-left: 4px solid var(--primary);
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.88rem;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .notice-list li .badge {
+      background: var(--accent);
+      color: var(--white);
+      font-size: 0.65rem;
+      padding: 2px 8px;
+      border-radius: 12px;
+      white-space: nowrap;
+      margin-top: 2px;
+      font-weight: 700;
+    }
+    .notice-list li .badge.new { background: #27ae60; }
+    .sidebar-box {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 22px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+    .sidebar-box h3 {
+      font-size: 1rem;
+      color: var(--primary);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--secondary);
+    }
+    .sidebar-box ul li {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 0.85rem;
+    }
+    .sidebar-box ul li:last-child { border-bottom: none; }
+    .sidebar-box ul li a { color: var(--primary); font-weight: 500; }
+    .sidebar-box ul li a:hover { color: var(--accent); }
+
+    /* ── Stats ──────────────────────────────────────────────────────── */
+    #stats { background: var(--primary); color: var(--white); padding: 50px 24px; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 24px;
+      text-align: center;
+    }
+    .stat-item .number {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      color: var(--secondary);
+    }
+    .stat-item .label { font-size: 0.88rem; opacity: 0.85; margin-top: 6px; }
+
+    /* ── About ──────────────────────────────────────────────────────── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } }
+    .about-img {
+      background: linear-gradient(135deg, var(--primary) 0%, #16213e 100%);
+      border-radius: 12px;
+      height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-size: 5rem;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+    }
+    .about-text h2 { font-size: 1.6rem; color: var(--primary); margin-bottom: 14px; }
+    .about-text p  { color: #555; margin-bottom: 14px; font-size: 0.95rem; }
+    .about-features { margin-top: 20px; }
+    .about-features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 0;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+    .about-features li::before {
+      content: '✔';
+      color: #27ae60;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    /* ── Contact ────────────────────────────────────────────────────── */
+    #contact { background: var(--light); }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+    @media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr; } }
+    .contact-info h3 { font-size: 1.2rem; color: var(--primary); margin-bottom: 20px; }
+    .contact-item {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 20px;
+      align-items: flex-start;
+    }
+    .contact-item .icon {
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .contact-item p { font-size: 0.9rem; color: #555; }
+    .contact-item strong { color: var(--text); }
+
+    .contact-form { background: var(--white); padding: 28px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+    .contact-form h3 { font-size: 1.1rem; color: var(--primary); margin-bottom: 20px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 0.85rem; color: var(--text); margin-bottom: 6px; font-weight: 600; }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: inherit;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { border-color: var(--primary); }
+    .form-group textarea { height: 110px; resize: vertical; }
+    .form-submit {
+      background: var(--primary);
+      color: var(--white);
+      padding: 12px 28px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      width: 100%;
+    }
+    .form-submit:hover { background: #0d5284; }
+
+    /* ── Footer ─────────────────────────────────────────────────────── */
+    footer {
+      background: #16213e;
+      color: rgba(255,255,255,0.8);
+    }
+    .footer-top {
+      max-width: 1200px;
+      margin: auto;
+      padding: 48px 24px 32px;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 32px;
+    }
+    @media (max-width: 900px) { .footer-top { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 560px) { .footer-top { grid-template-columns: 1fr; } }
+    .footer-top h4 {
+      color: var(--secondary);
+      font-size: 0.95rem;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .footer-top p { font-size: 0.85rem; line-height: 1.7; }
+    .footer-top ul li { margin-bottom: 8px; }
+    .footer-top ul li a { font-size: 0.85rem; color: rgba(255,255,255,0.7); transition: color 0.2s; }
+    .footer-top ul li a:hover { color: var(--secondary); }
+    .footer-bottom {
+      background: #0d1626;
+      text-align: center;
+      padding: 16px 24px;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ── Ticker ─────────────────────────────────────────────────────── */
+    .ticker-wrap {
+      background: #e8f4f8;
+      border-top: 1px solid #c8e0eb;
+      border-bottom: 1px solid #c8e0eb;
+      overflow: hidden;
+      padding: 10px 0;
+    }
+    .ticker-inner {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 0 24px;
+    }
+    .ticker-label {
+      background: var(--primary);
+      color: var(--white);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 4px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .ticker-track {
+      overflow: hidden;
+      flex: 1;
+    }
+    .ticker-text {
+      white-space: nowrap;
+      display: inline-block;
+      animation: ticker 28s linear infinite;
+      font-size: 0.85rem;
+      color: var(--text);
+    }
+    @keyframes ticker {
+      0%   { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* ── Responsive nav ─────────────────────────────────────────────── */
+    @media (max-width: 840px) {
+      .header-inner { flex-direction: column; align-items: flex-start; }
+      nav ul { gap: 4px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Top strip ──────────────────────────────────────────────────────── -->
+<div class="top-strip">
+  Government of Maharashtra &nbsp;|&nbsp; Skill, Vocational Education, Training and Innovation Department
+</div>
+
+<!-- ── Header ─────────────────────────────────────────────────────────── -->
+<header>
+  <div class="header-inner">
+    <div class="logo-wrap">
+      <div class="logo-circle"><span>MS</span></div>
+      <div class="logo-text">
+        <h1>Maharashtra State Board of Technical Education</h1>
+        <p>महाराष्ट्र राज्य तंत्र शिक्षण मंडळ, मुंबई &nbsp;|&nbsp; Autonomous Body – Government of Maharashtra</p>
+      </div>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="results.html">Results</a></li>
+        <li><a href="syllabus.html">Syllabus</a></li>
+        <li><a href="timetable.html">Time Table</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- ── Ticker ─────────────────────────────────────────────────────────── -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span class="ticker-label">LATEST</span>
+    <div class="ticker-track">
+      <span class="ticker-text">
+        🔔 Winter 2024 Exam Results declared – Check Now &nbsp;|&nbsp;
+        📋 Time Table for Summer 2025 Examinations published &nbsp;|&nbsp;
+        📚 Revised Curriculum (2022 Pattern) available for download &nbsp;|&nbsp;
+        📢 Online enrollment for Summer 2025 exam starts from March 15, 2025 &nbsp;|&nbsp;
+        🏆 MSBTE Innovation, Ideation and Entrepreneurship Contest – Registrations Open
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- ── Hero ───────────────────────────────────────────────────────────── -->
+<section class="hero">
+  <h2>Empowering Technical Education<br>Across Maharashtra</h2>
+  <p>
+    MSBTE prescribes curriculum, conducts examinations, and grants diplomas
+    for students enrolled in polytechnic and technical institutes across the state.
+  </p>
+  <div class="hero-btns">
+    <a href="results.html" class="btn btn-primary">Check Results</a>
+    <a href="syllabus.html" class="btn btn-outline">View Syllabus</a>
+  </div>
+</section>
+
+<!-- ── Quick links ─────────────────────────────────────────────────────── -->
+<div class="quick-links">
+  <div class="quick-links-inner">
+    <span>Quick Links →</span>
+    <a href="results.html" class="ql-item">Exam Results</a>
+    <a href="timetable.html" class="ql-item">Time Table</a>
+    <a href="syllabus.html" class="ql-item">Curriculum</a>
+    <a href="#notices" class="ql-item">Notifications</a>
+    <a href="contact.html" class="ql-item">Hall Ticket</a>
+    <a href="contact.html" class="ql-item">Verification</a>
+  </div>
+</div>
+
+<!-- ── Services ───────────────────────────────────────────────────────── -->
+<section id="services">
+  <div class="section-inner">
+    <div class="section-title">
+      <h2>Our Services</h2>
+      <p>Everything you need as a student, institute, or educator – all in one place.</p>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <h3>Exam Results</h3>
+        <p>View your Summer / Winter examination results by entering your enrollment number.</p>
+        <a href="results.html" class="card-link">View Results</a>
+      </div>
+      <div class="card">
+        <div class="card-icon">📅</div>
+        <h3>Time Table</h3>
+        <p>Download the official exam timetable for all semesters and courses.</p>
+        <a href="timetable.html" class="card-link">Get Timetable</a>
+      </div>
+      <div class="card">
+        <div class="card-icon">📚</div>
+        <h3>Syllabus & Curriculum</h3>
+        <p>Access the latest 2022 revised curriculum for all diploma programs.</p>
+        <a href="syllabus.html" class="card-link">Download Syllabus</a>
+      </div>
+      <div class="card">
+        <div class="card-icon">🎫</div>
+        <h3>Hall Ticket</h3>
+        <p>Download your examination admit card / hall ticket using your credentials.</p>
+        <a href="contact.html" class="card-link">Get Hall Ticket</a>
+      </div>
+      <div class="card">
+        <div class="card-icon">📜</div>
+        <h3>Certificate Verification</h3>
+        <p>Verify the authenticity of MSBTE diplomas and mark sheets online.</p>
+        <a href="contact.html" class="card-link">Verify Certificate</a>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏫</div>
+        <h3>Institute Information</h3>
+        <p>Find affiliated polytechnic institutes across all districts of Maharashtra.</p>
+        <a href="contact.html" class="card-link">Find Institute</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Stats ───────────────────────────────────────────────────────────── -->
+<section id="stats">
+  <div class="section-inner">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="number">1,900+</div>
+        <div class="label">Affiliated Institutes</div>
+      </div>
+      <div class="stat-item">
+        <div class="number">9 Lakh+</div>
+        <div class="label">Students Enrolled</div>
+      </div>
+      <div class="stat-item">
+        <div class="number">200+</div>
+        <div class="label">Diploma Programs</div>
+      </div>
+      <div class="stat-item">
+        <div class="number">36</div>
+        <div class="label">Districts Covered</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Notices ─────────────────────────────────────────────────────────── -->
+<section id="notices">
+  <div class="section-inner">
+    <div class="section-title">
+      <h2>Notifications &amp; Circulars</h2>
+      <p>Stay updated with the latest announcements from MSBTE.</p>
+    </div>
+    <div class="notices-grid">
+      <div>
+        <ul class="notice-list">
+          <li>
+            <span class="badge new">NEW</span>
+            <span>Winter 2024 Examination Results declared for all semesters. Students can check results on the portal.</span>
+          </li>
+          <li>
+            <span class="badge">INFO</span>
+            <span>Time Table for Summer 2025 Examinations (1st to 6th Semester) is now available for download.</span>
+          </li>
+          <li>
+            <span class="badge new">NEW</span>
+            <span>Online enrollment for Summer 2025 examinations starts from 15th March 2025 (Late fee from 25th March).</span>
+          </li>
+          <li>
+            <span class="badge">INFO</span>
+            <span>Revised Model Answer Paper for Winter 2024 uploaded on the official portal.</span>
+          </li>
+          <li>
+            <span class="badge">CIRCULAR</span>
+            <span>Circular regarding implementation of Revised Curriculum (2022 Pattern) for odd semester 2024-25.</span>
+          </li>
+          <li>
+            <span class="badge new">NEW</span>
+            <span>MSBTE Innovation, Ideation &amp; Entrepreneurship Contest 2025 – Registrations are now open for all diploma students.</span>
+          </li>
+          <li>
+            <span class="badge">INFO</span>
+            <span>Certificate Verification facility upgraded – instant verification now available for employers and universities.</span>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <div class="sidebar-box" style="margin-bottom:20px;">
+          <h3>Important Links</h3>
+          <ul>
+            <li><a href="results.html">📊 Exam Results Portal</a></li>
+            <li><a href="timetable.html">📅 Download Time Table</a></li>
+            <li><a href="syllabus.html">📚 Curriculum 2022</a></li>
+            <li><a href="contact.html">🎫 Hall Ticket Download</a></li>
+            <li><a href="contact.html">📜 Certificate Verification</a></li>
+            <li><a href="contact.html">🏫 Affiliated Institutes</a></li>
+          </ul>
+        </div>
+        <div class="sidebar-box">
+          <h3>Examination Calendar</h3>
+          <ul>
+            <li>Summer 2025 – April / May</li>
+            <li>Winter 2025 – October / November</li>
+            <li>Enrollment (Summer) – March 2025</li>
+            <li>Enrollment (Winter) – September 2025</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── About ───────────────────────────────────────────────────────────── -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-img">🎓</div>
+      <div class="about-text">
+        <h2>About MSBTE</h2>
+        <p>
+          Maharashtra State Board of Technical Education (MSBTE) is an autonomous body
+          established by the Government of Maharashtra under the Maharashtra Act No. 29 of 1997.
+          It is responsible for prescribing curriculum, conducting examinations and granting
+          diplomas to students pursuing technical education across the state.
+        </p>
+        <p>
+          MSBTE operates under the Skill, Vocational Education, Training and Innovation Department
+          and caters to more than nine lakh students studying in over 1,900 affiliated polytechnic
+          institutes across all 36 districts of Maharashtra.
+        </p>
+        <ul class="about-features">
+          <li>Prescribes & revises curriculum for diploma programs</li>
+          <li>Conducts Summer &amp; Winter examinations</li>
+          <li>Issues certificates, diplomas &amp; mark sheets</li>
+          <li>Affiliates and monitors polytechnic institutes</li>
+          <li>Promotes innovation &amp; skill development</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Contact ─────────────────────────────────────────────────────────── -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="section-title">
+      <h2>Contact Us</h2>
+      <p>We're here to help. Reach out to MSBTE for any queries or assistance.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h3>Get In Touch</h3>
+        <div class="contact-item">
+          <span class="icon">🏢</span>
+          <div>
+            <strong>Head Office</strong>
+            <p>49, Kherwadi, Ali Yawar Jung Marg, Bandra (East), Mumbai – 400 051, Maharashtra, India</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="icon">📞</span>
+          <div>
+            <strong>Phone</strong>
+            <p>022 – 2659 1503 / 2659 1504</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="icon">📠</span>
+          <div>
+            <strong>Fax</strong>
+            <p>022 – 2659 0568</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="icon">📧</span>
+          <div>
+            <strong>Email</strong>
+            <p>info@msbte.org.in</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="icon">🌐</span>
+          <div>
+            <strong>Official Website</strong>
+            <p>msbte.org.in</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="icon">⏰</span>
+          <div>
+            <strong>Office Hours</strong>
+            <p>Monday – Friday: 10:00 AM – 5:30 PM<br>Saturday: 10:00 AM – 1:00 PM</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="contact-form">
+          <h3>Send a Query</h3>
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" placeholder="Enter your full name" />
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" placeholder="Enter your email" />
+          </div>
+          <div class="form-group">
+            <label for="category">Query Category</label>
+            <select id="category">
+              <option value="">Select category</option>
+              <option>Exam Results</option>
+              <option>Hall Ticket</option>
+              <option>Certificate Verification</option>
+              <option>Syllabus / Curriculum</option>
+              <option>Institute Affiliation</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" placeholder="Describe your query here…"></textarea>
+          </div>
+          <button type="button" class="form-submit">Submit Query</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ──────────────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <h4>About MSBTE</h4>
+      <p>
+        Maharashtra State Board of Technical Education is an autonomous body responsible for
+        prescribing curriculum, conducting examinations, and issuing diplomas for technical
+        education in Maharashtra since 1997.
+      </p>
+    </div>
+    <div>
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="results.html">Results</a></li>
+        <li><a href="timetable.html">Time Table</a></li>
+        <li><a href="syllabus.html">Syllabus</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Student Services</h4>
+      <ul>
+        <li><a href="contact.html">Hall Ticket</a></li>
+        <li><a href="results.html">Exam Results</a></li>
+        <li><a href="contact.html">Certificate Verify</a></li>
+        <li><a href="syllabus.html">Curriculum 2022</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact Info</h4>
+      <ul>
+        <li>49, Kherwadi, Bandra (E)</li>
+        <li>Mumbai – 400 051</li>
+        <li>022 – 2659 1503</li>
+        <li>info@msbte.org.in</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    &copy; 2025 Maharashtra State Board of Technical Education (MSBTE). All Rights Reserved.
+  </div>
+</footer>
+
+</body>
+</html>

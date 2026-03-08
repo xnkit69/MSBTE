@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exam Results – MSBTE</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a1a2e; background: #f5f7fa; line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    :root {
+      --primary:   #0a3d62;
+      --secondary: #f39c12;
+      --accent:    #e74c3c;
+      --light:     #ecf0f1;
+      --white:     #ffffff;
+      --text:      #2c3e50;
+    }
+
+    .top-strip { background: var(--primary); color: var(--white); text-align: center; font-size: 0.78rem; padding: 6px 16px; }
+    header { background: var(--white); box-shadow: 0 2px 8px rgba(0,0,0,0.12); position: sticky; top: 0; z-index: 100; }
+    .header-inner { max-width: 1200px; margin: auto; display: flex; align-items: center; justify-content: space-between; padding: 12px 24px; gap: 16px; }
+    .logo-wrap { display: flex; align-items: center; gap: 14px; }
+    .logo-circle { width: 58px; height: 58px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .logo-circle span { color: var(--white); font-size: 1.15rem; font-weight: 800; letter-spacing: 1px; }
+    .logo-text h1 { font-size: 1.1rem; color: var(--primary); line-height: 1.2; }
+    .logo-text p  { font-size: 0.72rem; color: #666; }
+    nav ul { display: flex; gap: 4px; flex-wrap: wrap; }
+    nav ul li a { padding: 8px 14px; border-radius: 4px; font-size: 0.88rem; font-weight: 600; color: var(--text); transition: background 0.2s, color 0.2s; }
+    nav ul li a:hover, nav ul li a.active { background: var(--primary); color: var(--white); }
+    @media (max-width: 840px) { .header-inner { flex-direction: column; align-items: flex-start; } }
+
+    /* Page hero */
+    .page-hero { background: linear-gradient(135deg, var(--primary) 0%, #16213e 100%); color: var(--white); padding: 48px 24px 56px; text-align: center; }
+    .page-hero h2 { font-size: clamp(1.4rem, 3vw, 2.2rem); margin-bottom: 10px; }
+    .page-hero p  { opacity: 0.85; font-size: 0.95rem; }
+
+    /* Breadcrumb */
+    .breadcrumb { background: var(--light); padding: 10px 24px; }
+    .breadcrumb-inner { max-width: 1200px; margin: auto; font-size: 0.83rem; color: #666; }
+    .breadcrumb-inner a { color: var(--primary); font-weight: 600; }
+    .breadcrumb-inner a:hover { text-decoration: underline; }
+
+    /* Result search */
+    section { padding: 56px 24px; }
+    .section-inner { max-width: 900px; margin: auto; }
+    .search-card { background: var(--white); border-radius: 12px; padding: 36px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border-top: 5px solid var(--primary); }
+    .search-card h3 { font-size: 1.3rem; color: var(--primary); margin-bottom: 8px; }
+    .search-card p  { color: #666; font-size: 0.9rem; margin-bottom: 28px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 0.85rem; color: var(--text); margin-bottom: 6px; font-weight: 600; }
+    .form-group input, .form-group select {
+      width: 100%; padding: 11px 14px; border: 1px solid #ddd; border-radius: 6px;
+      font-size: 0.9rem; outline: none; transition: border-color 0.2s; font-family: inherit;
+    }
+    .form-group input:focus, .form-group select:focus { border-color: var(--primary); }
+    .search-btn {
+      background: var(--primary); color: var(--white); padding: 13px 36px;
+      border: none; border-radius: 6px; font-size: 0.95rem; font-weight: 700;
+      cursor: pointer; transition: background 0.2s; margin-top: 4px;
+    }
+    .search-btn:hover { background: #0d5284; }
+
+    /* Result table */
+    .result-section { background: var(--light); }
+    .result-table-wrap { overflow-x: auto; }
+    .result-table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+    .result-table th { background: var(--primary); color: var(--white); padding: 13px 16px; font-size: 0.85rem; text-align: left; }
+    .result-table td { padding: 12px 16px; font-size: 0.88rem; border-bottom: 1px solid #eee; }
+    .result-table tr:last-child td { border-bottom: none; }
+    .result-table tr:hover td { background: #f0f7ff; }
+    .status-pass { color: #27ae60; font-weight: 700; }
+    .status-fail { color: var(--accent); font-weight: 700; }
+    .status-atkt { color: var(--secondary); font-weight: 700; }
+
+    /* Info boxes */
+    .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; max-width: 900px; margin: 0 auto; }
+    .info-box { background: var(--white); border-radius: 8px; padding: 22px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); border-left: 4px solid var(--primary); }
+    .info-box h4 { color: var(--primary); margin-bottom: 8px; }
+    .info-box p  { font-size: 0.85rem; color: #555; }
+
+    /* Footer */
+    footer { background: #16213e; color: rgba(255,255,255,0.8); }
+    .footer-bottom { text-align: center; padding: 20px 24px; font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+  </style>
+</head>
+<body>
+
+<div class="top-strip">Government of Maharashtra &nbsp;|&nbsp; Skill, Vocational Education, Training and Innovation Department</div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-wrap">
+      <div class="logo-circle"><span>MS</span></div>
+      <div class="logo-text">
+        <h1>Maharashtra State Board of Technical Education</h1>
+        <p>महाराष्ट्र राज्य तंत्र शिक्षण मंडळ, मुंबई &nbsp;|&nbsp; Autonomous Body – Government of Maharashtra</p>
+      </div>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="results.html" class="active">Results</a></li>
+        <li><a href="syllabus.html">Syllabus</a></li>
+        <li><a href="timetable.html">Time Table</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="page-hero">
+  <h2>📊 Examination Results</h2>
+  <p>Check your Summer &amp; Winter examination results by entering your enrollment details below.</p>
+</div>
+
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="index.html">Home</a> &rsaquo; Exam Results
+  </div>
+</div>
+
+<!-- Search -->
+<section>
+  <div class="section-inner">
+    <div class="search-card">
+      <h3>Search Your Result</h3>
+      <p>Enter your enrollment number and select the examination session to view your result.</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="enroll">Enrollment Number</label>
+          <input type="text" id="enroll" placeholder="e.g. 2200012345" maxlength="12" />
+        </div>
+        <div class="form-group">
+          <label for="session">Examination Session</label>
+          <select id="session">
+            <option value="">Select Session</option>
+            <option>Winter 2024</option>
+            <option>Summer 2024</option>
+            <option>Winter 2023</option>
+            <option>Summer 2023</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="sem">Semester</label>
+          <select id="sem">
+            <option value="">Select Semester</option>
+            <option>1st Semester</option>
+            <option>2nd Semester</option>
+            <option>3rd Semester</option>
+            <option>4th Semester</option>
+            <option>5th Semester</option>
+            <option>6th Semester</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="captcha">Captcha: 4 + 3 = ?</label>
+          <input type="text" id="captcha" placeholder="Enter answer" maxlength="4" />
+        </div>
+      </div>
+      <button type="button" class="search-btn" onclick="showSampleResult()">Search Result</button>
+    </div>
+
+    <!-- Sample result table (shown after search) -->
+    <div id="result-output" style="display:none; margin-top:32px;">
+      <div class="result-table-wrap">
+        <table class="result-table">
+          <thead>
+            <tr>
+              <th>Subject Code</th>
+              <th>Subject Name</th>
+              <th>Theory (Max 80)</th>
+              <th>Practical (Max 20)</th>
+              <th>Total (Max 100)</th>
+              <th>Grade</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>22101</td><td>Basic Mathematics</td><td>64</td><td>18</td><td>82</td><td>O</td><td class="status-pass">PASS</td></tr>
+            <tr><td>22102</td><td>Basic Science</td><td>58</td><td>17</td><td>75</td><td>A+</td><td class="status-pass">PASS</td></tr>
+            <tr><td>22103</td><td>Communication Skills</td><td>62</td><td>19</td><td>81</td><td>O</td><td class="status-pass">PASS</td></tr>
+            <tr><td>22104</td><td>Engineering Drawing</td><td>55</td><td>16</td><td>71</td><td>A</td><td class="status-pass">PASS</td></tr>
+            <tr><td>22105</td><td>Workshop Practice</td><td>—</td><td>38 / 50</td><td>38</td><td>B+</td><td class="status-pass">PASS</td></tr>
+            <tr style="background:#f0fff4; font-weight:700;">
+              <td colspan="4">Overall Result</td><td colspan="3" class="status-pass">PASS &nbsp;|&nbsp; SGPA: 8.42</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:12px; font-size:0.8rem; color:#888;">* This is a sample result for demonstration. Official results are available on msbte.org.in</p>
+    </div>
+  </div>
+</section>
+
+<!-- Info -->
+<section class="result-section">
+  <div class="section-inner" style="max-width:900px;">
+    <div class="info-grid">
+      <div class="info-box">
+        <h4>📋 Grade Scale</h4>
+        <p>O (≥75) · A+ (≥65) · A (≥55) · B+ (≥50) · B (≥45) · C (≥40) · F (Below 40)</p>
+      </div>
+      <div class="info-box">
+        <h4>📅 Result Dates</h4>
+        <p>Summer 2024: August 2024<br>Winter 2024: February 2025<br>Summer 2025: August 2025</p>
+      </div>
+      <div class="info-box">
+        <h4>✏️ Revaluation</h4>
+        <p>Apply for revaluation / photocopy within 15 days of result declaration via the student portal.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-bottom">
+    &copy; 2025 Maharashtra State Board of Technical Education (MSBTE). All Rights Reserved.
+    &nbsp;|&nbsp; <a href="index.html" style="color:rgba(255,255,255,0.6);">Home</a>
+  </div>
+</footer>
+
+<script>
+  function showSampleResult() {
+    var enroll = document.getElementById('enroll').value.trim();
+    var session = document.getElementById('session').value;
+    var sem = document.getElementById('sem').value;
+    var captcha = document.getElementById('captcha').value.trim();
+    if (!enroll || !session || !sem) {
+      alert('Please fill in Enrollment Number, Session and Semester.');
+      return;
+    }
+    if (captcha !== '7') {
+      alert('Incorrect captcha. Hint: 4 + 3 = 7');
+      return;
+    }
+    document.getElementById('result-output').style.display = 'block';
+    document.getElementById('result-output').scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
